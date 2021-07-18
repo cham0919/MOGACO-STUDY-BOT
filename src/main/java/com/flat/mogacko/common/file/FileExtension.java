@@ -1,6 +1,6 @@
 package com.flat.mogacko.main.common.file;
 
-import com.flat.mogacko.common.lang.BaseEnum;
+import com.flat.mogacko.main.common.lang.BaseEnum;
 import lombok.Getter;
 
 @Getter

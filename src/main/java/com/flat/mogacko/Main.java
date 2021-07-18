@@ -1,7 +1,7 @@
 package com.flat.mogacko.main;
 
-import com.flat.mogacko.env.Config;
-import com.flat.mogacko.member.Member;
+import com.flat.mogacko.main.env.Config;
+import com.flat.mogacko.main.member.Member;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;

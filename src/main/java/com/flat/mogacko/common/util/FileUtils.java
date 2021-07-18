@@ -1,7 +1,6 @@
 package com.flat.mogacko.main.common.util;
 
-import com.flat.mogacko.common.file.FileExtension;
-import org.apache.commons.io.FilenameUtils;
+import com.flat.mogacko.main.common.file.FileExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +54,8 @@ public final class FileUtils {
 
 
     public static boolean isPropertiesFile(File file){
-        String extension = FilenameUtils.getExtension(file.getName());
-        return FileExtension.PROPERTIES.equalsIgnoreValue(extension);
+//        String extension = FilenameUtils.getExtension(file.getName());
+//        return FileExtension.PROPERTIES.equalsIgnoreValue(extension);
+        return FileExtension.PROPERTIES.equalsIgnoreValue("");
     }
 }
