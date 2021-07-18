@@ -1,4 +1,4 @@
-package com.flat.mogacko.main.common.util;
+package com.flat.mogacko.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

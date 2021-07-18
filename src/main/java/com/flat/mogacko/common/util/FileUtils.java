@@ -1,6 +1,6 @@
-package com.flat.mogacko.main.common.util;
+package com.flat.mogacko.common.util;
 
-import com.flat.mogacko.main.common.file.FileExtension;
+import com.flat.mogacko.common.file.FileExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.flat.mogacko.main;
+package com.flat.mogacko;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
