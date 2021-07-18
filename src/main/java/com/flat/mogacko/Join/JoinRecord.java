@@ -1,4 +1,4 @@
-package com.flat.mogacko.JoinRecord;
+package com.flat.mogacko.Join;
 
 import com.flat.mogacko.MogackoTable.JoinRecordTable;
 import com.flat.mogacko.MogackoTable.MemberTable;

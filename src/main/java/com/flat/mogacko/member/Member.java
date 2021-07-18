@@ -1,6 +1,6 @@
 package com.flat.mogacko.member;
 
-import com.flat.mogacko.JoinRecord.JoinRecord;
+import com.flat.mogacko.Join.JoinRecord;
 import com.flat.mogacko.MogackoTable.MemberTable;
 import com.flat.mogacko.rank.Rank;
 import lombok.Data;
@@ -21,6 +21,9 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = MemberTable.PK)
     private Long key;
+
+    @Column(name = MemberTable.SERVER)
+    private String server;
 
     @Column(name = MemberTable.NICKNAME)
     private String nickName;
