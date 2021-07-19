@@ -17,7 +17,7 @@ public class BehaviorTransponder extends Transponder {
     @Override
     public void onRoleCreate(@NotNull RoleCreateEvent event) {
         // 공지사항 메세지
-        event.getGuild().getDefaultChannel().sendMessage(Config.getProperty("role")).queue();
+        event.getGuild().getDefaultChannel().sendMessage(Config.getProperty("공지")).queue();
     }
 
     @Override
