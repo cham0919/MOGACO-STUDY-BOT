@@ -1,0 +1,90 @@
+package com.flat.mogacko.rank;
+
+import com.flat.mogacko.Join.JoinRecord;
+import com.flat.mogacko.Join.JoinRecordRepository;
+import com.flat.mogacko.common.util.TimeUtils;
+import com.flat.mogacko.member.MemberService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.LocalTime;
+import java.util.List;
+
+@Slf4j
+@AllArgsConstructor
+@Service
+public class RankServiceImpl implements RankService {
+
+    private final RankRepository rankRepository;
+    private final JoinRecordRepository joinRecordRepository;
+
+
+    @Override
+    public void save(Rank rank) {
+        rankRepository.save(rank);
+    }
+
+    @Override
+    public void updateAll() {
+        List<Rank> rankList  = rankRepository.findAll();
+        rankList.forEach(rank -> {
+            LocalTime localTime = rank.getMember().getTodayJoinTime();
+            rank.plusTime(localTime);
+        });
+    }
+
+    @Override
+    @Transactional
+    public String fetchCurrentRankMessage(String channel) {
+        List<Rank> rankList = fetchCurrentRank(channel);
+        StringBuilder respMessage = null;
+        if (rankList.size() > 0 ) {
+            respMessage = new StringBuilder("현재 랭킹입니다! \n ");
+            for (int i = 1; i <= rankList.size(); i++) {
+                Rank rank = rankList.get(i-1);
+                LocalTime totalTime = plusTotalTimeAndFCurrentTime(rank);
+
+                respMessage.append(i+". "+rank.getMember().getNickName()+ "님 ("+ getTimeFormat(totalTime) +")\n");
+            }
+        } else {
+            respMessage = new StringBuilder("참여 인원이 없어요 :(");
+        }
+
+        return respMessage.toString();
+    }
+
+    @Override
+    public void initRank() {
+        List<Rank> rankList = rankRepository.findAll();
+        rankList.forEach(rank -> {
+            rank.setTotaljointime(LocalTime.of(0,0,0));
+        });
+    }
+
+    private LocalTime plusTotalTimeAndFCurrentTime(Rank rank) {
+        LocalTime todayTime = rank.getMember().getTodayJoinTime();
+        LocalTime localTime = rank.getTotaljointime();
+        LocalTime totalTime = TimeUtils.plusLocalTime(localTime, todayTime);
+
+        JoinRecord joinRecord = joinRecordRepository.findFirst1ByMemberOrderByKeyDesc(rank.getMember());
+        if (joinRecord != null && joinRecord.getLeaveTime() == null) {
+            LocalTime currentTime = joinRecord.getJoinTime().toLocalTime();
+            currentTime = TimeUtils.minusLocalTime(LocalTime.now(), currentTime);
+            totalTime = TimeUtils.plusLocalTime(totalTime, currentTime);
+        }
+
+        return totalTime;
+    }
+
+    private String getTimeFormat(LocalTime localTime){
+        return localTime.getHour() + "시 " + localTime.getMinute() + "분 " + localTime.getSecond() + "초";
+    }
+
+
+    @Override
+    public List<Rank> fetchCurrentRank(String channel) {
+       return rankRepository.findAllByMember_Channel(channel);
+    }
+}
