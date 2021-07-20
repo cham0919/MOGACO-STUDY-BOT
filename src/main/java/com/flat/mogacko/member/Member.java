@@ -5,8 +5,11 @@ import com.flat.mogacko.MogackoTable.MemberTable;
 import com.flat.mogacko.rank.Rank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,12 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = MemberTable.TABLE_NAME)
+@Table(name = MemberTable.TABLE_NAME,
+        uniqueConstraints={
+                @UniqueConstraint(
+                        columnNames={MemberTable.CHANNEL, MemberTable.NICKNAME}
+                )
+        })
 public class Member {
 
     @Id
@@ -22,14 +30,18 @@ public class Member {
     @Column(name = MemberTable.PK)
     private Long key;
 
-    @Column(name = MemberTable.SERVER)
-    private String server;
+    @Column(name = MemberTable.CHANNEL)
+    private String channel;
 
     @Column(name = MemberTable.NICKNAME)
     private String nickName;
 
+    @Column(name = MemberTable.TODAYJOINTIME)
+    private LocalTime todayJoinTime = LocalTime.of(0,0,0);
+
     @Column(name = MemberTable.JOINDATE)
-    private Long joinDate;
+    @CreationTimestamp
+    private LocalDateTime joinDate;
 
     @OneToOne(mappedBy = "member")
     private Rank rank;
@@ -37,69 +49,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<JoinRecord> joinRecordList = new ArrayList<>();
 
-//    public static void main(String[] args) throws InterruptedException {
-//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//        Long a = System.currentTimeMillis();
-//        Thread.sleep(3000);
-//        Long b = System.currentTimeMillis();
-//        Long c = b - a;
-//
-//        String aa = format.format(new Date(a));
-//        String bb = format.format(new Date(b));
-//
-//        long hours = TimeUnit.MILLISECONDS.toHours(c);
-//        long minutes = TimeUnit.MILLISECONDS.toMinutes(c);
-//        long seconds = TimeUnit.MILLISECONDS.toSeconds(c);
-//        System.out.println(aa);
-//        System.out.println(bb);
-//        System.out.println("hours: " + hours);
-//        System.out.println("minutes: " + minutes);
-//        System.out.println("seconds: " + seconds);
-//    }
-
-
-//
-//
-//    public Member setLeaveTime(Long leaveTime){
-//        this.leaveTime = leaveTime;
-//        return this;
-//    }
-//
-//    public Member leaveVoiceChannel() throws TimeLimitExceededException {
-//        if (joinTime == 0L) { throw new TimeLimitExceededException("참여시간이 기록되어있지 않아요 :("); }
-//        return setLeaveTime(System.currentTimeMillis())
-//                .addJoinTotalTime()
-//                .initTime();
-//    }
-//
-//    public Member addJoinTotalTime(){
-//        Long joinPeriod = leaveTime - joinTime;
-//        joinTotalTime += joinPeriod;
-//        return this;
-//    }
-//
-//    public String getCurrentJoinTime() throws TimeLimitExceededException {
-//        if (leaveTime == 0L) {
-//            leaveVoiceChannel()
-//                    .setJoinTime(System.currentTimeMillis());
-//        } else {
-//            addJoinTotalTime()
-//                    .initTime();
-//        }
-//
-//        return timeToString();
-//    }
-//
-//    private String timeToString(){
-//        long hours = TimeUnit.MILLISECONDS.toHours(joinTotalTime);
-//        long minutes = TimeUnit.MILLISECONDS.toMinutes(joinTotalTime);
-//        long seconds = TimeUnit.MILLISECONDS.toSeconds(joinTotalTime);
-//        return hours+"시간 " + minutes + "분 " + seconds + "초";
-//    }
-//
-//    private Member initTime(){
-//        joinTime = 0L;
-//        leaveTime = 0L;
-//        return this;
-//    }
+    public Member addJoinTime(LocalTime localTime){
+        todayJoinTime = todayJoinTime.plusHours(localTime.getHour())
+                .plusMinutes(localTime.getMinute())
+                .plusSeconds(localTime.getSecond());
+        return this;
+    }
 }
