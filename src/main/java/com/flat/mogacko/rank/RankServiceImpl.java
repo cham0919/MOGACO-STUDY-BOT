@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalTime;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,13 +43,24 @@ public class RankServiceImpl implements RankService {
     public String fetchCurrentRankMessage(String channel) {
         List<Rank> rankList = fetchCurrentRank(channel);
         StringBuilder respMessage = null;
+        List<RankDto> rankDtoList = new LinkedList<>();
         if (rankList.size() > 0 ) {
             respMessage = new StringBuilder("현재 랭킹입니다! \n ");
             for (int i = 1; i <= rankList.size(); i++) {
                 Rank rank = rankList.get(i-1);
                 LocalTime totalTime = plusTotalTimeAndFCurrentTime(rank);
+                RankDto dto = new RankDto().setNickName(rank.getMember().getNickName())
+                        .setTotalTime(totalTime);
+                rankDtoList.add(dto);
+            }
 
-                respMessage.append(i+". "+rank.getMember().getNickName()+ "님 ("+ getTimeFormat(totalTime) +")\n");
+            rankDtoList = rankDtoList.stream()
+                    .sorted(Comparator.comparing(RankDto::getTotalTime).reversed())
+            .collect(Collectors.toList());
+
+            for (int i = 0; i < rankDtoList.size(); i++) {
+                RankDto dto = rankDtoList.get(i);
+                respMessage.append((i+1)+". "+dto.getNickName()+ "님 ("+ getTimeFormat(dto.getTotalTime()) +")\n");
             }
         } else {
             respMessage = new StringBuilder("참여 인원이 없어요 :(");
@@ -85,6 +99,6 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public List<Rank> fetchCurrentRank(String channel) {
-       return rankRepository.findAllByMember_Channel(channel);
+        return rankRepository.findAllByMember_Channel(channel);
     }
 }
