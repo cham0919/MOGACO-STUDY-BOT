@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration packagingData="true">
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- <Pattern>%d{MM-dd HH:mm:ss.SSS} [%16thread] %40file[%-4line] %msg %n</Pattern> -->
+            <pattern>%d{HH:mm:ss.SSS} [%-16.16thread] %-5level [%-8.-8marker] %-36.36logger{36}  - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <property scope="context" name="MOGACO_LOG_ROOT" value="/home/ubuntu/mogaco" />
+    <appender name="dailyRollingFileAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${MOGACO_LOG_ROOT}/mogaco.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${MOGACO_LOG_ROOT}/sd.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 10GB -->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg
+                %n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.quartz.core.QuartzSchedulerThread" level="INFO"/>
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.eclipse" level="INFO"/>
+    <logger name="org.apache" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.flat.mogaco" level="INFO"/>
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="dailyRollingFileAppender" />
+    </root>
+</configuration>
