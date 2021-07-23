@@ -1,6 +1,7 @@
 package com.flat.mogacko.common.spring;
 
 import com.flat.mogacko.bot.discord.Transponder;
+import com.flat.mogacko.env.Config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
@@ -23,7 +24,8 @@ public class DiscordBotInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            JDA jda = JDABuilder.createDefault(args[0]).build();
+            String token = Config.getProperty("token");
+            JDA jda = JDABuilder.createDefault(token).build();
             transponderList.forEach(obj -> jda.addEventListener(obj));
         }catch (Throwable t){
             log.error(t.getMessage(), t);

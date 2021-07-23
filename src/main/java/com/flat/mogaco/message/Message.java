@@ -1,7 +1,5 @@
-package com.flat.mogacko.Message;
+package com.flat.mogacko.message;
 
-
-import lombok.AllArgsConstructor;
 
 public class Message {
 

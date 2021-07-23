@@ -1,7 +1,7 @@
 package com.flat.mogacko.rank;
 
 
-import com.flat.mogacko.Message.Message;
+import com.flat.mogacko.message.Message;
 import com.flat.mogacko.annot.CommandMapping;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

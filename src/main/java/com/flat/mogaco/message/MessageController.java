@@ -1,8 +1,9 @@
-package com.flat.mogacko.Message;
+package com.flat.mogacko.message;
 
 import com.flat.mogacko.annot.CommandMapping;
 import com.flat.mogacko.env.Config;
 import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class MessageController {
 
     @CommandMapping(command = "공지")
-    public String getRole(String param){
+    public String getRole(MessageReceivedEvent event, String param){
         if (param == null) {
-            return Config.getProperty("공지");
+            return Config.getProperty("공지_"+event.getGuild().getName(), "등록된 공지가 없습니다 :(");
         } else {
-            Config.setProperty("공지", param);
+            Config.setProperty("공지_"+event.getGuild().getName(), param);
             return "공지가 등록되었습니다.";
         }
     }
