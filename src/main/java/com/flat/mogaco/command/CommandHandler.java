@@ -1,8 +1,7 @@
-package com.flat.mogacko.command;
+package com.flat.mogaco.command;
 
-import com.flat.mogacko.annot.CommandMapping;
-import com.flat.mogacko.bot.discord.Transponder;
-import com.flat.mogacko.common.util.BeanUtils;
+import com.flat.mogaco.annot.CommandMapping;
+import com.flat.mogaco.common.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.reflections.Reflections;
@@ -44,6 +43,7 @@ public class CommandHandler {
                     option = arrayStr[1];
                 }
                 Map<String, Method> optionMap = commandMethod.getOrDefault(command, new ConcurrentHashMap<>());
+                log.debug("commandMethod option put :: {}, {}", command, optionMap);
                 optionMap.put(option, method);
                 commandMethod.put(command, optionMap);
             });
@@ -53,7 +53,7 @@ public class CommandHandler {
     }
 
     public Object commandHandle(MessageReceivedEvent event, String message){
-
+        log.debug("CommandHandler :: {}", message);
         Method method = null;
         String command;
         String option;
