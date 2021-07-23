@@ -1,8 +1,8 @@
-package com.flat.mogacko.bot.discord;
+package com.flat.mogaco.bot.discord;
 
-import com.flat.mogacko.Join.JoinRecordService;
-import com.flat.mogacko.env.Config;
-import com.flat.mogacko.member.MemberDto;
+import com.flat.mogaco.Join.JoinRecordService;
+import com.flat.mogaco.env.Config;
+import com.flat.mogaco.member.MemberDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;

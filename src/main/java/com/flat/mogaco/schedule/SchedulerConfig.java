@@ -1,4 +1,4 @@
-package com.flat.mogacko.schedule;
+package com.flat.mogaco.schedule;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;

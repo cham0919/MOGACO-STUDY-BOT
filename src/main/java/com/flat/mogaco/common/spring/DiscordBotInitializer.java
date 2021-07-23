@@ -1,8 +1,7 @@
-package com.flat.mogacko.common.spring;
+package com.flat.mogaco.common.spring;
 
-import com.flat.mogacko.bot.discord.Transponder;
-import com.flat.mogacko.env.Config;
-import lombok.RequiredArgsConstructor;
+import com.flat.mogaco.bot.discord.Transponder;
+import com.flat.mogaco.env.Config;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

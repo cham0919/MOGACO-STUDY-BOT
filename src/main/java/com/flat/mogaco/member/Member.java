@@ -1,8 +1,8 @@
-package com.flat.mogacko.member;
+package com.flat.mogaco.member;
 
-import com.flat.mogacko.Join.JoinRecord;
-import com.flat.mogacko.MogackoTable.MemberTable;
-import com.flat.mogacko.rank.Rank;
+import com.flat.mogaco.Join.JoinRecord;
+import com.flat.mogaco.MogackoTable.MemberTable;
+import com.flat.mogaco.rank.Rank;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;

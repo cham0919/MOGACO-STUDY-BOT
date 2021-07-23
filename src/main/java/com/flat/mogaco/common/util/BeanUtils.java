@@ -1,6 +1,6 @@
-package com.flat.mogacko.common.util;
+package com.flat.mogaco.common.util;
 
-import com.flat.mogacko.common.spring.ApplicationContextProvider;
+import com.flat.mogaco.common.spring.ApplicationContextProvider;
 import org.springframework.context.ApplicationContext;
 
 public class BeanUtils {

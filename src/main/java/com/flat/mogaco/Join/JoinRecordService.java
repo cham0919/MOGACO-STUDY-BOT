@@ -1,7 +1,7 @@
-package com.flat.mogacko.Join;
+package com.flat.mogaco.Join;
 
-import com.flat.mogacko.member.Member;
-import com.flat.mogacko.member.MemberDto;
+import com.flat.mogaco.member.Member;
+import com.flat.mogaco.member.MemberDto;
 
 public interface JoinRecordService {
 

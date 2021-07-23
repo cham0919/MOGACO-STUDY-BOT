@@ -1,4 +1,4 @@
-package com.flat.mogacko.common.spring;
+package com.flat.mogaco.common.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

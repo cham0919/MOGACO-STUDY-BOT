@@ -1,4 +1,4 @@
-package com.flat.mogacko;
+package com.flat.mogaco;
 
 public class MogackoTable {
 

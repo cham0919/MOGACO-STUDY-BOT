@@ -1,6 +1,6 @@
-package com.flat.mogacko.bot.discord;
+package com.flat.mogaco.bot.discord;
 
-import com.flat.mogacko.command.CommandHandler;
+import com.flat.mogaco.command.CommandHandler;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Service;

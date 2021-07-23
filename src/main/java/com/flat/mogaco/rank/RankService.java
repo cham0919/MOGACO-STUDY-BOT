@@ -1,4 +1,4 @@
-package com.flat.mogacko.rank;
+package com.flat.mogaco.rank;
 
 import java.util.List;
 

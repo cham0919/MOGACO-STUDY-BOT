@@ -1,4 +1,4 @@
-package com.flat.mogacko.env;
+package com.flat.mogaco.env;
 
 import java.util.Properties;
 

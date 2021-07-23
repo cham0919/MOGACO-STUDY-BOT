@@ -1,4 +1,4 @@
-package com.flat.mogacko.member;
+package com.flat.mogaco.member;
 
 
 import lombok.Data;

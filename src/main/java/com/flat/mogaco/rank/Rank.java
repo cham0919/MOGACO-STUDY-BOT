@@ -1,9 +1,9 @@
-package com.flat.mogacko.rank;
+package com.flat.mogaco.rank;
 
 
-import com.flat.mogacko.MogackoTable.MemberTable;
-import com.flat.mogacko.MogackoTable.RankTable;
-import com.flat.mogacko.member.Member;
+import com.flat.mogaco.MogackoTable.MemberTable;
+import com.flat.mogaco.MogackoTable.RankTable;
+import com.flat.mogaco.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

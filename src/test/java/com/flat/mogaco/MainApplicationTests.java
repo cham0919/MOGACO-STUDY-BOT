@@ -1,7 +1,4 @@
-package com.flat.mogacko;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+package com.flat.mogaco;
 
 //@SpringBootTest
 //class MainApplicationTests {

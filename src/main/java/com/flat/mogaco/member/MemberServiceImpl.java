@@ -1,11 +1,10 @@
-package com.flat.mogacko.member;
+package com.flat.mogaco.member;
 
-import com.flat.mogacko.Join.JoinRecord;
-import com.flat.mogacko.Join.JoinRecordRepository;
-import com.flat.mogacko.Join.JoinRecordService;
-import com.flat.mogacko.common.util.TimeUtils;
-import com.flat.mogacko.rank.Rank;
-import com.flat.mogacko.rank.RankRepository;
+import com.flat.mogaco.Join.JoinRecord;
+import com.flat.mogaco.Join.JoinRecordService;
+import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.rank.Rank;
+import com.flat.mogaco.rank.RankRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

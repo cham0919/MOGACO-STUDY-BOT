@@ -1,6 +1,5 @@
-package com.flat.mogacko.common.util;
+package com.flat.mogaco.common.util;
 
-import java.time.Duration;
 import java.time.LocalTime;
 
 public class TimeUtils {

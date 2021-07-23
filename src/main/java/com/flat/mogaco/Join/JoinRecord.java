@@ -1,8 +1,8 @@
-package com.flat.mogacko.Join;
+package com.flat.mogaco.Join;
 
-import com.flat.mogacko.MogackoTable.JoinRecordTable;
-import com.flat.mogacko.MogackoTable.MemberTable;
-import com.flat.mogacko.member.Member;
+import com.flat.mogaco.MogackoTable.JoinRecordTable;
+import com.flat.mogaco.MogackoTable.MemberTable;
+import com.flat.mogaco.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

@@ -1,12 +1,12 @@
-package com.flat.mogacko.schedule;
+package com.flat.mogaco.schedule;
 
-import com.flat.mogacko.Join.JoinRecord;
-import com.flat.mogacko.Join.JoinRecordService;
-import com.flat.mogacko.common.util.TimeUtils;
-import com.flat.mogacko.member.Member;
-import com.flat.mogacko.member.MemberService;
-import com.flat.mogacko.rank.Rank;
-import com.flat.mogacko.rank.RankService;
+import com.flat.mogaco.Join.JoinRecord;
+import com.flat.mogaco.Join.JoinRecordService;
+import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.member.Member;
+import com.flat.mogaco.member.MemberService;
+import com.flat.mogaco.rank.Rank;
+import com.flat.mogaco.rank.RankService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

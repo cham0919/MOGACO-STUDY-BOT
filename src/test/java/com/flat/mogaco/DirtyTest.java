@@ -1,10 +1,8 @@
-package com.flat.mogacko;
+package com.flat.mogaco;
 
-import com.flat.mogacko.rank.Rank;
+import com.flat.mogaco.rank.Rank;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;

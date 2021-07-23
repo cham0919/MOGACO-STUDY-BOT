@@ -1,9 +1,9 @@
-package com.flat.mogacko.Join;
+package com.flat.mogaco.Join;
 
-import com.flat.mogacko.common.util.TimeUtils;
-import com.flat.mogacko.member.Member;
-import com.flat.mogacko.member.MemberDto;
-import com.flat.mogacko.member.MemberRepository;
+import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.member.Member;
+import com.flat.mogaco.member.MemberDto;
+import com.flat.mogaco.member.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

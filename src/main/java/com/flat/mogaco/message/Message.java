@@ -1,4 +1,4 @@
-package com.flat.mogacko.message;
+package com.flat.mogaco.message;
 
 
 public class Message {

@@ -1,4 +1,4 @@
-package com.flat.mogacko.lang;
+package com.flat.mogaco.lang;
 
 public interface Initializable {
 

@@ -1,4 +1,4 @@
-package com.flat.mogacko.annot;
+package com.flat.mogaco.annot;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

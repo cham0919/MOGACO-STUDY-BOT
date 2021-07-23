@@ -1,7 +1,7 @@
-package com.flat.mogacko.message;
+package com.flat.mogaco.message;
 
-import com.flat.mogacko.annot.CommandMapping;
-import com.flat.mogacko.env.Config;
+import com.flat.mogaco.annot.CommandMapping;
+import com.flat.mogaco.env.Config;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Service;

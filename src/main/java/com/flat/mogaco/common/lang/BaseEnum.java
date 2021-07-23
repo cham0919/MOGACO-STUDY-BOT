@@ -1,4 +1,4 @@
-package com.flat.mogacko.common.lang;
+package com.flat.mogaco.common.lang;
 
 public interface BaseEnum {
 

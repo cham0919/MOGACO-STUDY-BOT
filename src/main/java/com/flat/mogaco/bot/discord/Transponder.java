@@ -1,4 +1,4 @@
-package com.flat.mogacko.bot.discord;
+package com.flat.mogaco.bot.discord;
 
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
