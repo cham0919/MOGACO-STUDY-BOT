@@ -28,7 +28,7 @@ public class CommandHandler {
 
         //@CommandMapping이 붙은 Method 탐색
         Reflections reflections =  new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage("com.flat.mogacko")).setScanners(new MethodAnnotationsScanner()));
+                .setUrls(ClasspathHelper.forPackage("com.flat.mogaco")).setScanners(new MethodAnnotationsScanner()));
 
         Set<Method> methods = reflections.getMethodsAnnotatedWith(CommandMapping.class);
 
