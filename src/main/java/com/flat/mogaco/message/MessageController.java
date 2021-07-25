@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageController {
 
+    @CommandMapping(command = "명령어")
+    public String fetchCommand(){
+        return Config.getProperty("명령어");
+    }
+
+
     @CommandMapping(command = "공지")
     public String getRole(MessageReceivedEvent event, String param){
         if (param == null) {
