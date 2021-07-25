@@ -11,7 +11,7 @@ public class TimeUtils {
     }
 
     public static LocalTime plusLocalTime(LocalTime localTime, LocalTime target) {
-        return localTime.minusHours(target.getHour())
+        return localTime.plusHours(target.getHour())
                 .plusMinutes(target.getMinute())
                 .plusSeconds(target.getSecond());
     }
