@@ -67,7 +67,7 @@ public class CommandHandler {
         }
 
         // Command 가 실행할 메서드
-        Map<String, Method> optionMap = commandMethod.get(command);
+        Map<String, Method> optionMap = commandMethod.getOrDefault(command, new HashMap<>());
 
         if (message.contains(" ")) {
             option = message.substring(0, message.indexOf(" ")).trim();
