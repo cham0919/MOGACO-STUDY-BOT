@@ -1,6 +1,7 @@
 package com.flat.mogaco.command;
 
 import com.flat.mogaco.annot.CommandMapping;
+import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.common.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -15,13 +16,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
 public class CommandHandler {
 
-    private Map<String, Map<String, Method>> commandMethod = new ConcurrentHashMap<>();
+    private Map<String, Map<String, Method>> commandMethod = new HashMap<>();
 
     @PostConstruct
     public void loadMogacoMessage(){
@@ -36,13 +36,8 @@ public class CommandHandler {
             methods.forEach(method -> {
                 CommandMapping commandMappingAnnotation = method.getAnnotation(CommandMapping.class);
                 String command = commandMappingAnnotation.command();
-                String option = "None";
-                if (command.contains(" ")) {
-                    String[] arrayStr = command.split(" ");
-                    command = arrayStr[0];
-                    option = arrayStr[1];
-                }
-                Map<String, Method> optionMap = commandMethod.getOrDefault(command, new ConcurrentHashMap<>());
+                String option = commandMappingAnnotation.option();
+                Map<String, Method> optionMap = commandMethod.getOrDefault(command, new HashMap<>());
                 log.debug("commandMethod option put :: {}, {}", command, optionMap);
                 optionMap.put(option, method);
                 commandMethod.put(command, optionMap);
@@ -52,36 +47,32 @@ public class CommandHandler {
         }
     }
 
-    public Object commandHandle(MessageReceivedEvent event, String message){
-        log.debug("CommandHandler :: {}", message);
+    public String commandHandle(MessageReceivedEvent event, String message){
         Method method = null;
-        String command;
-        String option;
+        String command = null;
+        String option = "Default";
         String param = null;
-        if (message.contains(" ")) {
-            command = message.substring(0, message.indexOf(" ")).trim();
-            message = message.substring(command.length()).trim();
-        } else {
-            command = message.trim();
-            message = message.substring(command.length()).trim();
+
+        String[] messageArray = message.split(" ");
+        command = messageArray[0];
+
+        if (!commandMethod.containsKey(command)) { return null; }
+
+        Map<String, Method> optionMap = commandMethod.get(command);
+        Set<String> optionSet = optionMap.keySet();
+        if (messageArray.length > 1) {
+
+            if (messageArray.length == 1 && isOption(optionSet, messageArray[1])) {
+                option = messageArray[1];
+            } else {
+                param = "";
+                for (int i = 1; i < messageArray.length; i++) {
+                    param += messageArray[i];
+                }
+            }
         }
 
-        // Command 가 실행할 메서드
-        Map<String, Method> optionMap = commandMethod.getOrDefault(command, new HashMap<>());
-
-        if (message.contains(" ")) {
-            option = message.substring(0, message.indexOf(" ")).trim();
-        } else {
-            option = message;
-        }
-
-        if (optionMap.containsKey(option)) {
-            method = optionMap.get(option);
-            param = message.substring(option.length()).trim();
-        } else {
-            method = optionMap.get("None");
-            param = message.length() == 0 ? null : message;
-        }
+        method = optionMap.get(option);
 
         // 실행시킬 메소드가 있는 Controller
         Object controller = BeanUtils.getBean(method.getDeclaringClass());
@@ -98,13 +89,17 @@ public class CommandHandler {
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
         }
-        return respMessage;
+        return (String)respMessage;
+    }
+
+    private boolean isOption(Set<String> optionSet, String option) {
+        return optionSet.stream().anyMatch(o -> o.equals(option));
     }
 
     // 메소드 파라미터 준비
     private Object[] getParams(MessageReceivedEvent event, String param, Method method) {
+        EventDto eventDto = new EventDto(event);
 
-        //
         final Parameter[] parameters = method.getParameters();
         final Class[] parameterTypes = method.getParameterTypes();
         final int parameterCount = method.getParameterCount();
@@ -116,8 +111,8 @@ public class CommandHandler {
 
             if (classOfParam == String.class && nameOfParam.equals("param") && param != null) {
                 params[i] = param;
-            } else if (classOfParam == MessageReceivedEvent.class) {
-                params[i] = event;
+            } else if (classOfParam == EventDto.class) {
+                params[i] = eventDto;
             }
         }
         return params;
