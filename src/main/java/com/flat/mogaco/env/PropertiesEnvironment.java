@@ -1,13 +1,14 @@
 package com.flat.mogaco.env;
 
+import com.flat.mogaco.common.util.BeanUtils;
 import com.flat.mogaco.common.util.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Properties;
@@ -17,13 +18,12 @@ public class PropertiesEnvironment implements Environment {
     private final Logger log = LoggerFactory.getLogger(PropertiesEnvironment.class);
 
     private Properties props = new Properties();
-    private final String config = "/command";
 
 
     private static PropertiesEnvironment instance;
 
     private PropertiesEnvironment() {
-        init();
+
     }
 
     public static PropertiesEnvironment getInstance(){
@@ -37,10 +37,14 @@ public class PropertiesEnvironment implements Environment {
         return instance;
     }
 
-    private void init() {
-        File[] propFiles = fetchPropertiesFiles();
-        Arrays.stream(propFiles)
-                .forEach(this::loadProp);
+    private void init()  {
+        try {
+            File[] propFiles = fetchPropertiesFiles();
+            Arrays.stream(propFiles)
+                    .forEach(this::loadProp);
+        }catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     private void loadProp(File propFile){
@@ -53,8 +57,8 @@ public class PropertiesEnvironment implements Environment {
         }
     }
 
-    private File[] fetchPropertiesFiles() {
-        File propDir = new File(getClass().getResource(config).getFile());
+    private File[] fetchPropertiesFiles() throws IOException {
+        File propDir = ResourceUtils.getFile("classpath:command");
         return propDir.listFiles(FileUtils::isPropertiesFile);
     }
 

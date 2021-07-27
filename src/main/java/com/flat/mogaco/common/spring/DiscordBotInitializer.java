@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -22,8 +23,9 @@ public class DiscordBotInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        log.info("token start :: {}", Arrays.toString(args));
         try {
-            String token = Config.getProperty("token");
+            String token = args[0];
             JDA jda = JDABuilder.createDefault(token).build();
             transponderList.forEach(obj -> jda.addEventListener(obj));
         }catch (Throwable t){
