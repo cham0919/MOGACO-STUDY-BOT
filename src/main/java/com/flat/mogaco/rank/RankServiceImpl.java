@@ -92,7 +92,7 @@ public class RankServiceImpl implements RankService {
     }
 
     private String getTimeFormat(LocalTime localTime){
-        return localTime.getHour() + "시 " + localTime.getMinute() + "분 " + localTime.getSecond() + "초";
+        return localTime.getHour() + "시간 " + localTime.getMinute() + "분 " + localTime.getSecond() + "초";
     }
 
 
