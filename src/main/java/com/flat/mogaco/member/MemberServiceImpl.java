@@ -2,7 +2,9 @@ package com.flat.mogaco.member;
 
 import com.flat.mogaco.Join.JoinRecord;
 import com.flat.mogaco.Join.JoinRecordService;
+import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.message.Message;
 import com.flat.mogaco.rank.Rank;
 import com.flat.mogaco.rank.RankRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import java.rmi.NoSuchObjectException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -26,24 +29,19 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void joinMember(MemberDto memberDto) {
-        Member member = new Member().setChannel(memberDto.getChannel())
-                .setNickName(memberDto.getNickName());
+    public void joinMember(EventDto eventDto) {
+        Member member = new Member().setChannel(eventDto.getChannelName())
+                .setNickName(eventDto.getNickName());
         memberRepository.save(member);
         Rank rank = new Rank().setMember(member);
         rankRepository.save(rank);
     }
 
     @Override
-    public List<MemberDto> fetchAllJoinMember(String channel) {
+    public List<String> fetchAllJoinMember(String channel) {
         List<Member> memberList = memberRepository.findAllByChannel(channel);
-        List<MemberDto> memberDtoList = new ArrayList<>();
-        memberList.forEach(entity -> {
-            memberDtoList.add(
-                    new MemberDto().setNickName(entity.getNickName())
-            );
-        });
-        return memberDtoList;
+        List<String> nickNameList = memberList.stream().map(m -> m.getNickName()).collect(Collectors.toList());
+        return nickNameList;
     }
 
     @Override
@@ -53,10 +51,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public LocalTime fetchTodayJoinTime(MemberDto memberDto) throws NoSuchObjectException {
-        Member member = memberRepository.findByChannelAndNickName(memberDto.getChannel(), memberDto.getNickName());
+    public LocalTime fetchTodayJoinTime(EventDto eventDto) throws NoSuchObjectException {
+        Member member = memberRepository.findByChannelAndNickName(eventDto.getChannelName(), eventDto.getNickName());
         if (member == null) {
-            throw new NoSuchObjectException("참여 인원이 없습니다.");
+            throw new NoSuchObjectException(Message.NO_EXIST_MEMBER.getMessage());
         }
         LocalTime todayJoinTime = member.getTodayJoinTime();
         JoinRecord joinRecord = joinRecordService.findOneByMember(member);

@@ -1,17 +1,19 @@
 package com.flat.mogaco.member;
 
+import com.flat.mogaco.bot.discord.EventDto;
+
 import java.rmi.NoSuchObjectException;
 import java.time.LocalTime;
 import java.util.List;
 
 public interface MemberService {
 
-    void joinMember(MemberDto memberDto);
+    void joinMember(EventDto eventDto);
 
-    List<MemberDto> fetchAllJoinMember(String channel);
+    List<String> fetchAllJoinMember(String channel);
 
     List<Member> fetchAllJoinMember();
 
-    LocalTime fetchTodayJoinTime(MemberDto memberDto) throws NoSuchObjectException;
+    LocalTime fetchTodayJoinTime(EventDto eventDto) throws NoSuchObjectException;
 
 }

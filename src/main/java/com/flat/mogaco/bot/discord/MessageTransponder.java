@@ -16,7 +16,7 @@ public class MessageTransponder extends Transponder{
     public void onMessageReceived(MessageReceivedEvent event){
         String message = event.getMessage().getContentRaw();
         if (message.startsWith("!")) {
-            String respMessage = (String)commandHandler.commandHandle(event, message.substring(1).trim());
+            String respMessage = commandHandler.commandHandle(event, message.substring(1).trim());
             if (respMessage != null) {
                 event.getChannel().sendMessage(respMessage).queue();
             }

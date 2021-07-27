@@ -1,8 +1,8 @@
 package com.flat.mogaco.Join;
 
+import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.common.util.TimeUtils;
 import com.flat.mogaco.member.Member;
-import com.flat.mogaco.member.MemberDto;
 import com.flat.mogaco.member.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ public class JoinRecordServiceImpl implements JoinRecordService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void voiceJoinStart(MemberDto memberDto) {
-        Member member = findByChannelAndNickName(memberDto);
+    public void voiceJoinStart(EventDto eventDto) {
+        Member member = findByChannelAndNickName(eventDto);
         if (member != null) {
             voiceJoinStart(member);
         }
@@ -41,8 +41,8 @@ public class JoinRecordServiceImpl implements JoinRecordService {
 
     @Override
     @Transactional
-    public void voiceJoinLeave(MemberDto memberDto) {
-        Member member = findByChannelAndNickName(memberDto);
+    public void voiceJoinLeave(EventDto eventDto) {
+        Member member = findByChannelAndNickName(eventDto);
         JoinRecord joinRecord = findOneByMember(member);
         if (joinRecord == null || joinRecord.getLeaveTime() != null) {
             DayOfWeek dayOfWeek = JoinRecord.serverStartTime.getDayOfWeek();
@@ -78,7 +78,7 @@ public class JoinRecordServiceImpl implements JoinRecordService {
         });
     }
 
-    private Member findByChannelAndNickName(MemberDto memberDto) {
-        return memberRepository.findByChannelAndNickName(memberDto.getChannel(), memberDto.getNickName());
+    private Member findByChannelAndNickName(EventDto eventDto) {
+        return memberRepository.findByChannelAndNickName(eventDto.getChannelName(), eventDto.getNickName());
     }
 }

@@ -2,7 +2,6 @@ package com.flat.mogaco.bot.discord;
 
 import com.flat.mogaco.Join.JoinRecordService;
 import com.flat.mogaco.env.Config;
-import com.flat.mogaco.member.MemberDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
@@ -22,24 +21,18 @@ public class BehaviorTransponder extends Transponder {
     @Override
     public void onRoleCreate(@NotNull RoleCreateEvent event) {
         // 공지사항 메세지
-        event.getGuild().getDefaultChannel().sendMessage(Config.getProperty("공지")).queue();
+        event.getGuild().getDefaultChannel().sendMessage(Config.getProperty("공지_"+event.getGuild().getId())).queue();
     }
 
     @Override
     public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
-        String nickName = event.getMember().getEffectiveName();
-        String channel = event.getEntity().getGuild().getName();
-        MemberDto memberDto = new MemberDto().setNickName(nickName)
-                .setChannel(channel);
-        joinRecordService.voiceJoinStart(memberDto);
+        EventDto eventDto = new EventDto(event);
+        joinRecordService.voiceJoinStart(eventDto);
     } // 보이스 참여
 
     @Override
     public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
-        String nickName = event.getMember().getEffectiveName();
-        String channel = event.getEntity().getGuild().getName();
-        MemberDto memberDto = new MemberDto().setNickName(nickName)
-                .setChannel(channel);
-        joinRecordService.voiceJoinLeave(memberDto);
+        EventDto eventDto = new EventDto(event);
+        joinRecordService.voiceJoinLeave(eventDto);
     } // 보이스 종료
 }

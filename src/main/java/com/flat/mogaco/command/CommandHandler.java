@@ -47,6 +47,10 @@ public class CommandHandler {
         }
     }
 
+    private boolean isOption(Set<String> optionSet, String option) {
+        return optionSet.stream().anyMatch(o -> o.equals(option));
+    }
+
     public String commandHandle(MessageReceivedEvent event, String message){
         Method method = null;
         String command = null;
@@ -90,10 +94,6 @@ public class CommandHandler {
             log.error(e.getMessage(), e);
         }
         return (String)respMessage;
-    }
-
-    private boolean isOption(Set<String> optionSet, String option) {
-        return optionSet.stream().anyMatch(o -> o.equals(option));
     }
 
     // 메소드 파라미터 준비
