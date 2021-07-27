@@ -29,7 +29,7 @@ public class Scheduler {
 
     // 매일 00:00시에 오늘 스터디량 더하기
     @Transactional
-    @Scheduled(cron = "0 1 0 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void initTodayJoinTime() {
         // 오늘 한 것들 조회
         List<Member> memberList = memberService.fetchAllJoinMember();
@@ -56,7 +56,7 @@ public class Scheduler {
 
     // 매주 월요일 00:00에 초기화
     @Transactional
-    @Scheduled(cron = "0 1 0 * * MON")
+    @Scheduled(cron = "0 0 0 * * MON")
     public void initWeek() {
         List<Member> memberList = memberService.fetchAllJoinMember();
         rankService.initRank();
