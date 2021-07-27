@@ -1,9 +1,9 @@
 package com.flat.mogaco.message;
 
 import com.flat.mogaco.annot.CommandMapping;
+import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.env.Config;
 import lombok.extern.slf4j.Slf4j;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -12,23 +12,23 @@ public class MessageController {
 
     @CommandMapping(command = "명령어")
     public String fetchCommand(){
-        return Config.getProperty("명령어");
+        return Message.INFO.getMessage();
     }
 
 
     @CommandMapping(command = "공지")
-    public String getRole(MessageReceivedEvent event, String param){
+    public String getRole(EventDto eventDto, String param){
         if (param == null) {
-            return Config.getProperty("공지_"+event.getGuild().getName(), "등록된 공지가 없습니다 :(");
+            return Config.getProperty("공지_"+eventDto.getChannelId(), Message.NOT_FIND_NOTICE.getMessage());
         } else {
-            Config.setProperty("공지_"+event.getGuild().getName(), param);
-            return "공지가 등록되었습니다.";
+            Config.setProperty("공지_"+eventDto.getChannelId(), param);
+            return Message.SUCCESS_DELETE_NOTICE.getMessage();
         }
     }
 
-    @CommandMapping(command = "공지 삭제")
-    public String deleteRole(){
-        Config.setProperty("공지", "등록된 공지가 없습니다 :(");
-        return "공지가 삭제되었습니다";
+    @CommandMapping(command = "공지", option = "삭제")
+    public String deleteRole(EventDto eventDto){
+        Config.setProperty("공지_"+eventDto.getChannelId(), Message.NOT_FIND_NOTICE.getMessage());
+        return Message.SUCCESS_DELETE_NOTICE.getMessage();
     }
 }

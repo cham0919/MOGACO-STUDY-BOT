@@ -2,6 +2,7 @@ package com.flat.mogaco.member;
 
 
 import com.flat.mogaco.annot.CommandMapping;
+import com.flat.mogaco.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -38,9 +39,9 @@ public class MemberController {
             List<MemberDto> memberDtoList = memberService.fetchAllJoinMember(event.getGuild().getName());
             StringBuilder respMessage =  new StringBuilder();
             if (memberDtoList.size() == 0) {
-                respMessage.append("현재 참여 인원이 없습니다");
+                respMessage.append(Message.NO_EXIST_MEMBER.getMessage());
             } else {
-                respMessage.append("현재 참여 인원입니다 \n");
+                respMessage.append(Message.CURRENT_MEMBER.getMessage() + "\n");
                 for (int i = 1; i <= memberDtoList.size(); i++) {
                     respMessage.append(i + ". " + memberDtoList.get(i-1).getNickName() + "\n");
                 }
@@ -48,7 +49,7 @@ public class MemberController {
             return respMessage.toString();
         }catch (Throwable t) {
             log.error(t.getMessage(), t);
-            return "웁스! 에러 발생 ㅜㅜ";
+            return Message.ERROR.getMessage();
         }
     }
 
@@ -63,9 +64,9 @@ public class MemberController {
                     localTime.getMinute()+"분"+
                     localTime.getSecond()+"초 공부하셨습니다";
         } catch (DataIntegrityViolationException  e) {
-            return "웁스! 에러 발생 ㅜㅜ";
+            return Message.ERROR.getMessage();
         } catch (NoSuchObjectException e) {
-            return "참여 중이 아닙니다!";
+            return Message.NOT_JOIN_MEMBER.getMessage();
         }
     }
 }

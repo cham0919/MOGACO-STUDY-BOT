@@ -21,7 +21,7 @@ public class RankController {
         try {
             return rankService.fetchCurrentRankMessage(event.getGuild().getName());
         }catch (DataIntegrityViolationException e) {
-            return Message.ERROR;
+            return Message.ERROR.getMessage();
         }
     }
 }
