@@ -9,8 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Slf4j
 @SpringBootApplication
 @EnableScheduling
-public class MainApplication extends SpringBootServletInitializer {
-//public class MainApplication {
+//public class MainApplication extends SpringBootServletInitializer {
+public class MainApplication {
 
     public static void main(String[] args){
         SpringApplication.run(MainApplication.class, args);
