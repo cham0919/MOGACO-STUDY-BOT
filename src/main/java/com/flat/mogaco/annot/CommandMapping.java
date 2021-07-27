@@ -11,4 +11,6 @@ public @interface CommandMapping {
 
     String command();
 
+    String option() default "Default";
+
 }
