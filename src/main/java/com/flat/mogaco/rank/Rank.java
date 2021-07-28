@@ -3,7 +3,6 @@ package com.flat.mogaco.rank;
 
 import com.flat.mogaco.MogackoTable.MemberTable;
 import com.flat.mogaco.MogackoTable.RankTable;
-import com.flat.mogaco.common.time.Time;
 import com.flat.mogaco.member.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.time.Duration;
-import java.time.LocalTime;
 
 @Entity
 @Getter @Setter

@@ -19,7 +19,7 @@ public class RankDto implements Comparable<RankDto> {
 
     @Override
     public int compareTo(@NotNull RankDto o) {
-        long result = o.getTotalTime().toMillis() - this.totalTime.toMillis();
+        long result =  this.totalTime.toMillis() - o.getTotalTime().toMillis();
         return result > 0 ? 1 : result < 0 ? -1 : 0;
     }
 }

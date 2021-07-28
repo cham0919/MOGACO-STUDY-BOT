@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
