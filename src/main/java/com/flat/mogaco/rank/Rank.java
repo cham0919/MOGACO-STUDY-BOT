@@ -3,12 +3,14 @@ package com.flat.mogaco.rank;
 
 import com.flat.mogaco.MogackoTable.MemberTable;
 import com.flat.mogaco.MogackoTable.RankTable;
+import com.flat.mogaco.common.time.Time;
 import com.flat.mogaco.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalTime;
 
 @Entity
@@ -27,12 +29,5 @@ public class Rank {
     private Member member;
 
     @Column(name = RankTable.TOTAL_JOIN_TIME)
-    private LocalTime totaljointime = LocalTime.of(0,0,0);
-
-    public Rank plusTime(LocalTime localTime){
-        totaljointime = totaljointime.plusHours(localTime.getHour())
-                .plusMinutes(localTime.getMinute())
-                .plusSeconds(localTime.getSecond());
-        return this;
-    }
+    private Duration totaljointime = Duration.ZERO;
 }

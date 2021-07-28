@@ -46,11 +46,10 @@ public class Scheduler {
                 joinRecordService.voiceJoinStart(member);
             }
 
-            LocalTime totalJoinTime = rank.getTotaljointime();
-            totalJoinTime = TimeUtils.plusLocalTime(totalJoinTime, todayJoinTime);
+            Duration totalJoinTime = rank.getTotaljointime();
+            totalJoinTime = TimeUtils.plusTime(totalJoinTime, todayJoinTime);
             rank.setTotaljointime(totalJoinTime);
             member.setTodayJoinTime(LocalTime.of(0,0,0));
-
         });
     }
 

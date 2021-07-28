@@ -3,13 +3,23 @@ package com.flat.mogaco.rank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Comparator;
 
 @Getter @Setter
 @Accessors(chain = true)
-public class RankDto {
+public class RankDto implements Comparable<RankDto> {
 
     private String nickName;
-    private LocalTime totalTime;
+    private Duration totalTime;
+
+
+    @Override
+    public int compareTo(@NotNull RankDto o) {
+        long result = o.getTotalTime().toMillis() - this.totalTime.toMillis();
+        return result > 0 ? 1 : result < 0 ? -1 : 0;
+    }
 }

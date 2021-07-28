@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,11 +30,11 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public void updateAll() {
-        List<Rank> rankList  = rankRepository.findAll();
-        rankList.forEach(rank -> {
-            LocalTime localTime = rank.getMember().getTodayJoinTime();
-            rank.plusTime(localTime);
-        });
+//        List<Rank> rankList  = rankRepository.findAll();
+//        rankList.forEach(rank -> {
+//            LocalTime localTime = rank.getMember().getTodayJoinTime();
+//            rank.plusTime(localTime);
+//        });
     }
 
     @Override
@@ -43,18 +42,16 @@ public class RankServiceImpl implements RankService {
     public String fetchCurrentRankMessage(String channel) {
         List<Rank> rankList = fetchCurrentRank(channel);
         List<RankDto> rankDtoList = new LinkedList<>();
+
         if (rankList.size() > 0 ) {
             for (int i = 1; i <= rankList.size(); i++) {
                 Rank rank = rankList.get(i-1);
-                LocalTime totalTime = plusTotalTimeAndFCurrentTime(rank);
+                Duration totalTime = plusTotalTimeAndCurrentTime(rank);
                 RankDto dto = new RankDto().setNickName(rank.getMember().getNickName())
                         .setTotalTime(totalTime);
                 rankDtoList.add(dto);
             }
-
-            rankDtoList = rankDtoList.stream()
-                    .sorted(Comparator.comparing(RankDto::getTotalTime).reversed())
-            .collect(Collectors.toList());
+            rankDtoList.sort(Collections.reverseOrder());
 
             return Message.CURRENT_RANK.getMessage(rankDtoList);
         } else {
@@ -66,20 +63,21 @@ public class RankServiceImpl implements RankService {
     public void initRank() {
         List<Rank> rankList = rankRepository.findAll();
         rankList.forEach(rank -> {
-            rank.setTotaljointime(LocalTime.of(0,0,0));
+            rank.setTotaljointime(Duration.ZERO);
         });
     }
 
-    private LocalTime plusTotalTimeAndFCurrentTime(Rank rank) {
+    private Duration plusTotalTimeAndCurrentTime(Rank rank) {
+        Duration totalTime = rank.getTotaljointime();
         LocalTime todayTime = rank.getMember().getTodayJoinTime();
-        LocalTime localTime = rank.getTotaljointime();
-        LocalTime totalTime = TimeUtils.plusLocalTime(localTime, todayTime);
+        totalTime = TimeUtils.plusTime(totalTime, todayTime);
 
         JoinRecord joinRecord = joinRecordRepository.findFirst1ByMemberOrderByKeyDesc(rank.getMember());
+
         if (joinRecord != null && joinRecord.getLeaveTime() == null) {
             LocalTime currentTime = joinRecord.getJoinTime().toLocalTime();
             currentTime = TimeUtils.minusLocalTime(LocalTime.now(), currentTime);
-            totalTime = TimeUtils.plusLocalTime(totalTime, currentTime);
+            totalTime = TimeUtils.plusTime(totalTime, currentTime);
         }
 
         return totalTime;
