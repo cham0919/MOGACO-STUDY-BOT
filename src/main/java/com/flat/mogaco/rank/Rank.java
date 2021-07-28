@@ -35,8 +35,4 @@ public class Rank {
                 .plusSeconds(localTime.getSecond());
         return this;
     }
-
-    public String getTimeFormat(){
-        return totaljointime.getHour() + "시 " + totaljointime.getMinute() + "분 " + totaljointime.getSecond() + "초";
-    }
 }
