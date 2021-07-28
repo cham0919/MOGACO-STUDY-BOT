@@ -16,4 +16,8 @@ public class TimeUtils {
                 .plusSeconds(target.getSecond());
     }
 
+    public static String LocalTimeToString(LocalTime localTime){
+        return localTime.getHour() + "시간 " + localTime.getMinute() + "분 " + localTime.getSecond() + "초";
+    }
+
 }
