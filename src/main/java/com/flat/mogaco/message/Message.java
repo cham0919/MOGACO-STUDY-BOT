@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -43,11 +42,12 @@ public enum Message {
     CURRENT_MEMBER("현재 참여 인원입니다"){
         @Override
         public String getMessage(List nameList){
-            message += "\n";
+            String respMessage = message;
+            respMessage += "\n";
             for (int i = 1; i <= nameList.size(); i++) {
-                message += i + ". " + nameList.get(i-1) + "\n";
+                respMessage += i + ". " + nameList.get(i-1) + "\n";
             }
-            return message;
+            return respMessage;
         }
     },
     NOT_JOIN_MEMBER("참여 중이 아닙니다!"),
@@ -56,9 +56,10 @@ public enum Message {
     LOOKUP_JOIN_TIME("{}님은 오늘 {} 공부하셨습니다"){
         @Override
         public String getMessage(Object... params){
-            message = message.replaceFirst("\\{\\}", params[0].toString());
-            message = message.replaceFirst("\\{\\}", TimeUtils.LocalTimeToString((LocalTime)params[1]));
-            return message;
+            String respMessage = message;
+            respMessage = respMessage.replaceFirst("\\{\\}", params[0].toString());
+            respMessage = respMessage.replaceFirst("\\{\\}", TimeUtils.localTimeToString((LocalTime)params[1]));
+            return respMessage;
         }
     },
 
@@ -66,12 +67,13 @@ public enum Message {
     CURRENT_RANK("현재 랭킹입니다!"){
         @Override
         public String getMessage(List rankDtoList){
-            message += "\n";
+            String respMessage = message;
+            respMessage += "\n";
             for (int i = 0; i < rankDtoList.size(); i++) {
                 RankDto dto = (RankDto)rankDtoList.get(i);
-                message += (i+1)+". "+dto.getNickName()+ "님 ("+ TimeUtils.LocalTimeToString(dto.getTotalTime()) +")\n";
+                respMessage += (i+1)+". "+dto.getNickName()+ "님 ("+ TimeUtils.durationToString(dto.getTotalTime()) +")\n";
             }
-            return message;
+            return respMessage;
         }
     };
 
@@ -82,16 +84,18 @@ public enum Message {
 
 
     public String getMessage(List list){
+        String respMessage = message;
         for (Object param : list) {
-            message = message.replaceFirst("\\{\\}", param.toString());
+            respMessage = respMessage.replaceFirst("\\{\\}", param.toString());
         }
-        return message;
+        return respMessage;
     }
 
     public String getMessage(Object... params){
+        String respMessage = message;
         for (Object param : params) {
-            message = message.replaceFirst("\\{\\}", param.toString());
+            respMessage = respMessage.replaceFirst("\\{\\}", param.toString());
         }
-        return message;
+        return respMessage;
     }
 }
