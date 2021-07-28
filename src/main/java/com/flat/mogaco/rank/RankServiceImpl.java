@@ -3,6 +3,7 @@ package com.flat.mogaco.rank;
 import com.flat.mogaco.Join.JoinRecord;
 import com.flat.mogaco.Join.JoinRecordRepository;
 import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,10 +42,8 @@ public class RankServiceImpl implements RankService {
     @Transactional
     public String fetchCurrentRankMessage(String channel) {
         List<Rank> rankList = fetchCurrentRank(channel);
-        StringBuilder respMessage = null;
         List<RankDto> rankDtoList = new LinkedList<>();
         if (rankList.size() > 0 ) {
-            respMessage = new StringBuilder("현재 랭킹입니다! \n ");
             for (int i = 1; i <= rankList.size(); i++) {
                 Rank rank = rankList.get(i-1);
                 LocalTime totalTime = plusTotalTimeAndFCurrentTime(rank);
@@ -57,15 +56,10 @@ public class RankServiceImpl implements RankService {
                     .sorted(Comparator.comparing(RankDto::getTotalTime).reversed())
             .collect(Collectors.toList());
 
-            for (int i = 0; i < rankDtoList.size(); i++) {
-                RankDto dto = rankDtoList.get(i);
-                respMessage.append((i+1)+". "+dto.getNickName()+ "님 ("+ getTimeFormat(dto.getTotalTime()) +")\n");
-            }
+            return Message.CURRENT_RANK.getMessage(rankDtoList);
         } else {
-            respMessage = new StringBuilder("참여 인원이 없어요 :(");
+            return Message.NO_EXIST_MEMBER.getMessage();
         }
-
-        return respMessage.toString();
     }
 
     @Override
@@ -91,9 +85,6 @@ public class RankServiceImpl implements RankService {
         return totalTime;
     }
 
-    private String getTimeFormat(LocalTime localTime){
-        return localTime.getHour() + "시간 " + localTime.getMinute() + "분 " + localTime.getSecond() + "초";
-    }
 
 
     @Override

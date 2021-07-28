@@ -1,7 +1,13 @@
 package com.flat.mogaco.message;
 
+import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.rank.RankDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -31,13 +37,61 @@ public enum Message {
     NOT_FIND_NOTICE("등록된 공지가 없습니다 :("),
 
     // 참여
+    SUCCSEE_JOIN("{}님이 스터디에 참여하셨습니다!"),
+    ALREADY_JOIN("{}님은 이미 참여 중입니다!"),
     NO_EXIST_MEMBER("현재 참여 인원이 없습니다"),
-    CURRENT_MEMBER("현재 참여 인원입니다"),
-    NOT_JOIN_MEMBER("참여 중이 아닙니다!");
+    CURRENT_MEMBER("현재 참여 인원입니다"){
+        @Override
+        public String getMessage(List nameList){
+            message += "\n";
+            for (int i = 1; i <= nameList.size(); i++) {
+                message += i + ". " + nameList.get(i-1) + "\n";
+            }
+            return message;
+        }
+    },
+    NOT_JOIN_MEMBER("참여 중이 아닙니다!"),
+
+    // 조회
+    LOOKUP_JOIN_TIME("{}님은 오늘 {} 공부하셨습니다"){
+        @Override
+        public String getMessage(Object... params){
+            message = message.replaceFirst("\\{\\}", params[0].toString());
+            message = message.replaceFirst("\\{\\}", TimeUtils.LocalTimeToString((LocalTime)params[1]));
+            return message;
+        }
+    },
+
+    //랭크
+    CURRENT_RANK("현재 랭킹입니다!"){
+        @Override
+        public String getMessage(List rankDtoList){
+            message += "\n";
+            for (int i = 0; i < rankDtoList.size(); i++) {
+                RankDto dto = (RankDto)rankDtoList.get(i);
+                message += (i+1)+". "+dto.getNickName()+ "님 ("+ TimeUtils.LocalTimeToString(dto.getTotalTime()) +")\n";
+            }
+            return message;
+        }
+    };
 
 
-    private String message;
 
 
+    protected String message;
 
+
+    public String getMessage(List list){
+        for (Object param : list) {
+            message = message.replaceFirst("\\{\\}", param.toString());
+        }
+        return message;
+    }
+
+    public String getMessage(Object... params){
+        for (Object param : params) {
+            message = message.replaceFirst("\\{\\}", param.toString());
+        }
+        return message;
+    }
 }
