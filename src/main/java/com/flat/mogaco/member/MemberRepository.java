@@ -8,5 +8,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     List<Member> findAllByChannel(String channel);
 
-    Member findByChannelAndNickName(String channel, String nickName);
+    Member findByChannelAndUserId(String channel, String userId);
+
 }

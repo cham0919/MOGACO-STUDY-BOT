@@ -2,6 +2,7 @@ package com.flat.mogaco.Join;
 
 import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.member.Member;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public interface JoinRecordService {
 

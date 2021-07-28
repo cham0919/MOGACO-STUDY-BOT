@@ -66,7 +66,7 @@ public class CommandHandler {
         Set<String> optionSet = optionMap.keySet();
         if (messageArray.length > 1) {
 
-            if (messageArray.length == 1 && isOption(optionSet, messageArray[1])) {
+            if (messageArray.length == 2 && isOption(optionSet, messageArray[1])) {
                 option = messageArray[1];
             } else {
                 param = "";
@@ -113,6 +113,8 @@ public class CommandHandler {
                 params[i] = param;
             } else if (classOfParam == EventDto.class) {
                 params[i] = eventDto;
+            } else if (classOfParam == MessageReceivedEvent.class) {
+                params[i] = event;
             }
         }
         return params;

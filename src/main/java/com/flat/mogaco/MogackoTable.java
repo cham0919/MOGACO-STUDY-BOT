@@ -6,6 +6,7 @@ public class MogackoTable {
         public static final String TABLE_NAME = "MEMBER";
         public static final String PK = "member_id";
         public static final String NICKNAME = "nickname";
+        public static final String USERID = "userId";
         public static final String CHANNEL = "channel";
         public static final String JOINDATE = "joinDate";
         public static final String TODAYJOINTIME = "todayJoinTime";

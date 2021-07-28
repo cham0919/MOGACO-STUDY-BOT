@@ -1,6 +1,7 @@
 package com.flat.mogaco.message;
 
 import com.flat.mogaco.common.util.TimeUtils;
+import com.flat.mogaco.rank.Rank;
 import com.flat.mogaco.rank.RankDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public enum Message {
             "3. !조회 - 금주 본인의 참여시간을 알 수 있어요\n" +
             "4. !랭크 - 금주 랭크를 조회해요\n" +
             "5. !공지 - 이 방의 공지를 조회해요\n" +
-            "6. !공지 삭제 - 공지를 삭제해요\n" +
+            "6. !공지 {공지 내용} - 이 방의 공지를 등록해요. 방장만 가능해요\n" +
+            "7. !공지 삭제 - 공지를 삭제해요. 방장만 가능해요\n" +
             "\n" +
             "참여를 한 다음 음성 채널에 들어가게 되면 자동으로 시간이 카운트됩니다!\n" +
             "랭크는 매주 월요일마다 초기화됩니다 :)"),
@@ -34,9 +36,14 @@ public enum Message {
     SUCCESS_INSERT_NOTICE("공지가 등록되었습니다."),
     SUCCESS_DELETE_NOTICE("공지가 삭제되었습니다."),
     NOT_FIND_NOTICE("등록된 공지가 없습니다 :("),
+    NO_AUTHORITY_INSERT_NOTICE("공지 등록은 관리자만 가능해요 :("),
+    NO_AUTHORITY_DELETE_NOTICE("공지 삭제는 관리자만 가능해요 :("),
+
 
     // 참여
     SUCCSEE_JOIN("{}님이 스터디에 참여하셨습니다!"),
+    SUCCSEE_REMOVE_MEMBER("{}님을 스터디에서 추방하셨습니다."),
+    NEED_PARAM_TO_REMOVE_MEMBER("추방할 닉네임을 말해주세요."),
     ALREADY_JOIN("{}님은 이미 참여 중입니다!"),
     NO_EXIST_MEMBER("현재 참여 인원이 없습니다"),
     CURRENT_MEMBER("현재 참여 인원입니다"){
@@ -64,20 +71,18 @@ public enum Message {
     },
 
     //랭크
-    CURRENT_RANK("현재 랭킹입니다!"){
+    CURRENT_RANK("현재 랭크입니다!"){
         @Override
-        public String getMessage(List rankDtoList){
+        public String getMessage(List rankList){
             String respMessage = message;
             respMessage += "\n";
-            for (int i = 0; i < rankDtoList.size(); i++) {
-                RankDto dto = (RankDto)rankDtoList.get(i);
+            for (int i = 0; i < rankList.size(); i++) {
+                RankDto dto = (RankDto)rankList.get(i);
                 respMessage += (i+1)+". "+dto.getNickName()+ "님 ("+ TimeUtils.durationToString(dto.getTotalTime()) +")\n";
             }
             return respMessage;
         }
     };
-
-
 
 
     protected String message;

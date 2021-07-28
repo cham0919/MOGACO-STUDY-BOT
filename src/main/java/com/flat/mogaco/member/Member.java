@@ -2,15 +2,19 @@ package com.flat.mogaco.member;
 
 import com.flat.mogaco.Join.JoinRecord;
 import com.flat.mogaco.MogackoTable.MemberTable;
+import com.flat.mogaco.common.util.TimeUtils;
 import com.flat.mogaco.rank.Rank;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -20,7 +24,7 @@ import java.util.List;
 @Table(name = MemberTable.TABLE_NAME,
         uniqueConstraints={
                 @UniqueConstraint(
-                        columnNames={MemberTable.CHANNEL, MemberTable.NICKNAME}
+                        columnNames={MemberTable.CHANNEL, MemberTable.USERID}
                 )
         })
 public class Member {
@@ -33,8 +37,8 @@ public class Member {
     @Column(name = MemberTable.CHANNEL)
     private String channel;
 
-    @Column(name = MemberTable.NICKNAME)
-    private String nickName;
+    @Column(name = MemberTable.USERID)
+    private String userId;
 
     @Column(name = MemberTable.TODAYJOINTIME)
     private LocalTime todayJoinTime = LocalTime.of(0,0,0);
@@ -50,9 +54,23 @@ public class Member {
     private List<JoinRecord> joinRecordList = new ArrayList<>();
 
     public Member addJoinTime(LocalTime localTime){
-        todayJoinTime = todayJoinTime.plusHours(localTime.getHour())
-                .plusMinutes(localTime.getMinute())
-                .plusSeconds(localTime.getSecond());
+        todayJoinTime = TimeUtils.plusLocalTime(todayJoinTime, localTime);
         return this;
+    }
+
+    public LocalTime getTodayJoinTimeUntilNow() {
+        LocalTime todayJoinTimeUntilNow = todayJoinTime;
+        if (joinRecordList.size() == 0) return todayJoinTimeUntilNow;
+
+        joinRecordList.sort(Comparator.comparing(JoinRecord::getJoinTime, Collections.reverseOrder()));
+        JoinRecord joinRecord = joinRecordList.get(0);
+
+        if (joinRecord != null && joinRecord.getLeaveTime() == null) {
+            LocalTime currentTime = joinRecord.getJoinTime().toLocalTime();
+            currentTime = TimeUtils.minusLocalTime(LocalTime.now(), currentTime);
+            todayJoinTimeUntilNow = TimeUtils.plusLocalTime(todayJoinTimeUntilNow, currentTime);
+        }
+
+        return todayJoinTimeUntilNow;
     }
 }

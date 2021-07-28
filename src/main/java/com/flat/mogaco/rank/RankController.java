@@ -1,7 +1,6 @@
 package com.flat.mogaco.rank;
 
 
-import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.message.Message;
 import com.flat.mogaco.annot.CommandMapping;
 import lombok.AllArgsConstructor;
@@ -18,9 +17,9 @@ public class RankController {
     private final RankService rankService;
     
     @CommandMapping(command = "랭크")
-    public String fetchCurrentRank(EventDto eventDto){
+    public String fetchCurrentRank(MessageReceivedEvent event){
         try {
-            return rankService.fetchCurrentRankMessage(eventDto.getChannelName());
+            return rankService.fetchCurrentRankMessage(event);
         }catch (DataIntegrityViolationException e) {
             return Message.ERROR.getMessage();
         }

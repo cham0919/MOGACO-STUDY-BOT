@@ -17,7 +17,6 @@ public class BehaviorTransponder extends Transponder {
 
     private final JoinRecordService joinRecordService;
 
-
     @Override
     public void onRoleCreate(@NotNull RoleCreateEvent event) {
         // 공지사항 메세지
@@ -35,4 +34,5 @@ public class BehaviorTransponder extends Transponder {
         EventDto eventDto = new EventDto(event);
         joinRecordService.voiceJoinLeave(eventDto);
     } // 보이스 종료
+
 }

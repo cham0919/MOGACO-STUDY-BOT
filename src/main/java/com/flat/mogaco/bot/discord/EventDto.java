@@ -12,17 +12,22 @@ public class EventDto {
 
     private String channelId;
     private String channelName;
+
     private String nickName;
+    private String userId;
+
 
     public EventDto(MessageReceivedEvent event) {
         this.channelId = event.getGuild().getId();
         this.channelName = event.getGuild().getName();
         this.nickName = event.getMember().getEffectiveName();
+        this.userId = event.getMember().getId();
     }
 
     public EventDto(GenericGuildVoiceUpdateEvent event) {
         this.channelId = event.getGuild().getId();
         this.channelName = event.getGuild().getName();
         this.nickName = event.getMember().getEffectiveName();
+        this.userId = event.getMember().getId();
     }
 }
