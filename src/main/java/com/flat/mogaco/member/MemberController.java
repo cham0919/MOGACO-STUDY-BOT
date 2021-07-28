@@ -6,6 +6,7 @@ import com.flat.mogaco.bot.discord.EventDto;
 import com.flat.mogaco.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,11 @@ public class MemberController {
     }
 
     @CommandMapping(command = "참여인원")
-    public String getAllMemberInfo(MessageReceivedEvent event){
+    public String getAllMemberInfo(EventDto eventDto){
         try {
-            List<String> nameList = memberService.fetchAllJoinMember(event.getGuild().getName());
+            List<String> nameList = memberService.fetchAllJoinMember(eventDto.getChannelName());
             if (nameList.size() == 0) {
+                    
                 return Message.NO_EXIST_MEMBER.getMessage();
             } else {
                 return Message.CURRENT_MEMBER.getMessage(nameList);
