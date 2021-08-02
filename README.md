@@ -94,72 +94,92 @@ public @interface CommandMapping {
 
     String command();
 
+    String option() default "Default";
+
 }
 ```
  
-  <br/>
-  
-  
- **CommandMapping**
-   
-   ```java
- @Retention(RetentionPolicy.RUNTIME)
- @Target(ElementType.METHOD)
- public @interface CommandMapping {
- 
-     String command();
- 
- }
- ``` 
-   
-   
-**MessageController**   
-   
-```java
-   @CommandMapping(command = "공지 삭제")
-    public String deleteRole(){
-        Config.setProperty("공지", "등록된 공지가 없습니다 :(");
-        return "공지가 삭제되었습니다";
-    }
 
-```
- 
+ <br/>
  
 **CommandHandler**
  
 ```java
-    @PostConstruct
-    public void loadMogacoMessage(){
-
-        //@CommandMapping이 붙은 Method 탐색
-        Reflections reflections =  new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage("com.flat.mogaco")).setScanners(new MethodAnnotationsScanner()));
-
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(CommandMapping.class);
-
-        try {
-            methods.forEach(method -> {
-                CommandMapping commandMappingAnnotation = method.getAnnotation(CommandMapping.class);
-                String command = commandMappingAnnotation.command();
-                String option = "None";
-                if (command.contains(" ")) {
-                    String[] arrayStr = command.split(" ");
-                    command = arrayStr[0];
-                    option = arrayStr[1];
-                }
-                Map<String, Method> optionMap = commandMethod.getOrDefault(command, new ConcurrentHashMap<>());
-                log.debug("commandMethod option put :: {}, {}", command, optionMap);
-                optionMap.put(option, method);
-                commandMethod.put(command, optionMap);
-            });
-        }  catch (Throwable t) {
-            log.error(t.getMessage(), t);
-        }
-    }
+  public class CommandHandler {
+  
+      private Map<String, Map<String, Method>> commandMethod = new HashMap<>();
+  
+      @PostConstruct
+      public void loadMogacoMessage(){
+  
+          //@CommandMapping이 붙은 Method 탐색
+          Reflections reflections =  new Reflections(new ConfigurationBuilder()
+                  .setUrls(ClasspathHelper.forPackage("com.flat.mogaco")).setScanners(new MethodAnnotationsScanner()));
+  
+          Set<Method> methods = reflections.getMethodsAnnotatedWith(CommandMapping.class);
+  
+          try {
+              methods.forEach(method -> {
+                  CommandMapping commandMappingAnnotation = method.getAnnotation(CommandMapping.class);
+                  String command = commandMappingAnnotation.command();
+                  String option = commandMappingAnnotation.option();
+                  Map<String, Method> optionMap = commandMethod.getOrDefault(command, new HashMap<>());
+                  log.debug("commandMethod option put :: {}, {}", command, optionMap);
+                  optionMap.put(option, method);
+                  commandMethod.put(command, optionMap);
+              });
+          }  catch (Throwable t) {
+              log.error(t.getMessage(), t);
+          }
+      }
 ```
  
  
- 리플렉션을 활용하여 어노테이션을 추적해 메세지에 맞는 Controller 호출
+ 리플렉션을 활용하여 어노테이션을 추적해 메세지에 맞는 Controller 호출합니다.
+ 
+ <br/>
  
  
+   
+**MessageController**   
+   
+```java
+@CommandMapping(command = "명령어")
+public String fetchCommand(){
+    return Message.INFO.getMessage();
+}
+```
+ 
+ 그 덕분에 MessageController는 보다 깔끔하게 구현할 수 있었습니다.
+ 
+  <br/>
+  
+  **Message**   
+     
+  ```java
+public enum Message {
+    ...
 
+    // 참여
+    SUCCSEE_JOIN("{}님이 스터디에 참여하셨습니다!"),
+    SUCCSEE_REMOVE_MEMBER("{}님을 스터디에서 추방하셨습니다."),
+    NEED_PARAM_TO_REMOVE_MEMBER("추방할 닉네임을 말해주세요."),
+    ALREADY_JOIN("{}님은 이미 참여 중입니다!"),
+    NO_EXIST_MEMBER("현재 참여 인원이 없습니다"),
+    CURRENT_MEMBER("현재 참여 인원입니다"){
+        @Override
+        public String getMessage(List nameList){
+            String respMessage = message;
+            respMessage += "\n";
+            for (int i = 1; i <= nameList.size(); i++) {
+                respMessage += i + ". " + nameList.get(i-1) + "\n";
+            }
+            return respMessage;
+        }
+    },
+    NOT_JOIN_MEMBER("참여 중이 아닙니다!"),
+
+    ...
+
+  ```
+응답 메세지는 Enum을 통해 관리하고 있습니다. 이를 통해 메세지 관련 기능들에 대한 유지보수성을 높일 수 있었습니다. 
